@@ -1,0 +1,80 @@
+<html>
+<head>
+<script>
+function jsonp(url, callback) {
+    var callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+    window[callbackName] = function(data) {
+        delete window[callbackName];
+        document.body.removeChild(script);
+        callback(data);
+    };
+
+    var script = document.createElement('script');
+    script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
+    document.body.appendChild(script);
+}
+
+  function GetUrl(url) {
+    var xmlHttp = new XMLHttpRequest();
+    var proxy = 'https://cors-anywhere.herokuapp.com/';
+    xmlHttp.open("GET", proxy + url, false); // false for synchronous request
+    xmlHttp.send(null);
+    return xmlHttp.responseText;
+  }
+
+  function test(){
+    // console.log(GetUrl('https://api.vk.com/method/users.get?&access_token=7ac07a659b50676466131bbc9e22b9731dbbac7eefaa5a03714d5515662db5bc40146e2439be85be34769&v=5.131'));
+//	jsonp('https://api.vk.com/method/users.get?&access_token=7ac07a659b50676466131bbc9e22b9731dbbac7eefaa5a03714d5515662db5bc40146e2439be85be34769&v=5.131', function(data) {
+//	   console.log(JSON.stringify(data));
+//	});
+    t.GetJsonp('https://api.vk.com/method/users.get?&access_token=7ac07a659b50676466131bbc9e22b9731dbbac7eefaa5a03714d5515662db5bc40146e2439be85be34769&v=5.131');
+  }
+
+  function test2(){
+     console.log(this.result);
+  }
+
+var t = {
+
+  result: "",
+
+  GetUrl: function (url) {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", url, false); // false for synchronous request
+    xmlHttp.send(null);
+    return xmlHttp.responseText;
+  },
+  
+  _getJsonp: function (url, callback) {
+    console.log('url: ' + url);
+    var callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+    window[callbackName] = function(data) {
+        delete window[callbackName];
+        document.body.removeChild(script);
+        callback(data);
+    };
+
+    var script = document.createElement('script');
+    script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
+    document.body.appendChild(script);
+  },
+
+  GetJsonp: function (url){
+        result = "";
+	this._getJsonp(url, function(data) {
+           result = JSON.stringify(data);
+	});
+  },
+
+  GetJsonpResult: function(){
+     return this.result;
+  },
+
+}
+</script>
+</head>
+<body>
+<button onclick="test()">Click</button>
+<button onclick="test2()">Click 2</button>
+</body>
+</html>
